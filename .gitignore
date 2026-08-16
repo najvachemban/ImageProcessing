@@ -1,0 +1,87 @@
+# =========================
+# Python
+# =========================
+
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# =========================
+# Environment / Secrets
+# =========================
+
+.env
+.env.*
+!.env.example
+
+# =========================
+# Node / React
+# =========================
+
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# =========================
+# Uploaded & Generated Files
+# =========================
+
+uploads/*
+results/*
+processed/*
+tmp/
+temp/
+
+# Keep the folders in Git
+!uploads/.gitkeep
+!results/.gitkeep
+
+# =========================
+# Logs
+# =========================
+
+*.log
+logs/
+
+# =========================
+# Testing / Coverage
+# =========================
+
+.pytest_cache/
+.coverage
+htmlcov/
+.coverage.*
+
+# =========================
+# IDE
+# =========================
+
+.vscode/
+.idea/
+
+# =========================
+# OS
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+# Build / Cache
+# =========================
+
+*.egg-info/
+.cache/
+.pytest_cache/
+.mypy_cache/
+
+# Uploads/results (don't commit user data or generated files)
+backend/uploads/
+backend/results/
