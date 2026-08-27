@@ -85,3 +85,4 @@ Thumbs.db
 # Uploads/results (don't commit user data or generated files)
 backend/uploads/
 backend/results/
+backend/test-images/
