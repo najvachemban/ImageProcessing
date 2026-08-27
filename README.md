@@ -51,9 +51,10 @@ React UI → FastAPI → MySQL (job metadata, source of truth)
 - [x] **Day 1** — MySQL running in Docker; `jobs` table schema designed
       (UUID primary keys, indexed `status`/`user_id`, JSON `parameters`
       column for per-operation flexibility)
-- [x] Job creation endpoint (API → MySQL)
-- [x] Redis job queue
-- [ ] Worker process consuming jobs
+- [x] **Day 2** - Job creation endpoint (API → MySQL)
+- [x] **Day 2** - Redis job queue
+- [x] **Day 2** - Worker process consuming jobs from Redis (BRPOP), updating job status 
+ (PENDING → PROCESSING → COMPLETED) in MySQL; structured logging added
 - [ ] SVD compression implementation
 - [ ] Retry logic + exponential backoff
 - [ ] Idempotency handling
@@ -75,12 +76,5 @@ React UI → FastAPI → MySQL (job metadata, source of truth)
 | Frontend      | React           | Simple job submission/status UI |
 | Containerization | Docker Compose | Reproducible multi-service local environment |
 
-## Running locally
-
-\`\`\`bash
-docker compose up -d mysql
-cd backend
-source venv/bin/activate
-uvicorn app.main:app --reload --port 8000
-\`\`\`
+Worker process consuming jobs from Redis (BRPOP), updating job status (PENDING → PROCESSING → COMPLETED) in MySQL; structured logging added
 
