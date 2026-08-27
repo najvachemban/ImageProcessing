@@ -51,8 +51,8 @@ React UI → FastAPI → MySQL (job metadata, source of truth)
 - [x] **Day 1** — MySQL running in Docker; `jobs` table schema designed
       (UUID primary keys, indexed `status`/`user_id`, JSON `parameters`
       column for per-operation flexibility)
-- [ ] Job creation endpoint (API → MySQL)
-- [ ] Redis job queue
+- [x] Job creation endpoint (API → MySQL)
+- [x] Redis job queue
 - [ ] Worker process consuming jobs
 - [ ] SVD compression implementation
 - [ ] Retry logic + exponential backoff
