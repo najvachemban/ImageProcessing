@@ -1,15 +1,21 @@
 import time
 import logging
+import os
 from datetime import datetime
 
 from app.logging_config import setup_logging
 from app.database import SessionLocal
 from app.models import Job
 from app.queue import redis_client, QUEUE_NAME
+from app.processing import compress_image_svd
+from app.models import Job, Result
 
 setup_logging()
 logger = logging.getLogger("worker")
 
+RESULTS_DIR = "results"
+UPLOAD_DIR = "uploads"
+os.makedirs(RESULTS_DIR, exist_ok=True)
 
 def process_job(job_id: str) -> None:
     db = SessionLocal()
@@ -21,16 +27,35 @@ def process_job(job_id: str) -> None:
 
         logger.info("Picked up job %s (operation=%s)", job.job_id, job.operation)
 
-        # Mark as PROCESSING
         job.status = "PROCESSING"
         job.started_at = datetime.utcnow()
         db.commit()
 
-        # --- Simulated processing (real SVD logic comes in Step 7) ---
-        time.sleep(2)
-        # --------------------------------------------------------------
+        input_path = os.path.join(UPLOAD_DIR, job.filename)
+        output_filename = f"compressed_{job.filename}"
+        output_path = os.path.join(RESULTS_DIR, output_filename)
 
-        # Mark as COMPLETED
+        if job.operation == "svd_compress":
+            k = (job.parameters or {}).get("k", 50)
+            mode = (job.parameters or {}).get("mode", "grayscale")
+            stats = compress_image_svd(input_path, output_path, k, mode=mode)
+            logger.info(
+                "SVD compression done for job %s: mode=%s k=%s ratio=%sx time=%ss",
+                job.job_id, stats["mode"], stats["k_used"], stats["compression_ratio"], stats["processing_time_seconds"],
+            )
+
+            result = Result(
+                job_id=job.job_id,
+                output_path=output_path,
+                original_size_bytes=stats["original_size_bytes"],
+                compressed_size_bytes=stats["compressed_size_bytes"],
+                compression_ratio=stats["compression_ratio"],
+                processing_time_seconds=stats["processing_time_seconds"],
+                parameters_used=job.parameters,
+            )
+            db.add(result)
+        else:
+            logger.warning("Operation '%s' not yet implemented, skipping processing", job.operation)
         job.status = "COMPLETED"
         job.completed_at = datetime.utcnow()
         db.commit()
@@ -40,6 +65,8 @@ def process_job(job_id: str) -> None:
     except Exception:
         logger.exception("Error processing job %s", job_id)
         db.rollback()
+        job.status = "FAILED"
+        db.commit()
     finally:
         db.close()
 

@@ -86,3 +86,4 @@ Thumbs.db
 backend/uploads/
 backend/results/
 backend/test-images/
+backend/logs/

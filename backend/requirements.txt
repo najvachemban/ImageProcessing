@@ -9,3 +9,6 @@ python-multipart==0.0.32
 
 redis==5.0.8
 cryptography==50.0.1
+
+Pillow==10.4.0
+numpy==2.1.1

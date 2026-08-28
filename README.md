@@ -55,7 +55,8 @@ React UI → FastAPI → MySQL (job metadata, source of truth)
 - [x] **Day 2** - Redis job queue
 - [x] **Day 2** - Worker process consuming jobs from Redis (BRPOP), updating job status 
  (PENDING → PROCESSING → COMPLETED) in MySQL; structured logging added
-- [ ] SVD compression implementation
+- [x] **Day 3** - SVD compression implementation (k-rank approximation, grayscale & color modes)
+- [x] **Day 3** - Results persisted to MySQL (`results` table: compression ratio, timing, output path)
 - [ ] Retry logic + exponential backoff
 - [ ] Idempotency handling
 - [ ] Rate limiting

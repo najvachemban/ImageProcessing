@@ -19,3 +19,15 @@ class Job(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     started_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     completed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+
+class Result(Base):
+    __tablename__ = "results"
+
+    job_id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    output_path: Mapped[str] = mapped_column(String(255), nullable=False)
+    original_size_bytes: Mapped[int] = mapped_column(Integer, nullable=False)
+    compressed_size_bytes: Mapped[int] = mapped_column(Integer, nullable=False)
+    compression_ratio: Mapped[float | None] = mapped_column(nullable=True)
+    processing_time_seconds: Mapped[float] = mapped_column(nullable=False)
+    parameters_used: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
