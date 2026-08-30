@@ -7,7 +7,7 @@ from app.logging_config import setup_logging
 from app.database import SessionLocal
 from app.models import Job
 from app.queue import redis_client, QUEUE_NAME
-from app.processing import compress_image_svd
+from app.processing import compress_image_dct
 from app.models import Job, Result
 
 setup_logging()
@@ -35,13 +35,13 @@ def process_job(job_id: str) -> None:
         output_filename = f"compressed_{job.filename}"
         output_path = os.path.join(RESULTS_DIR, output_filename)
 
-        if job.operation == "svd_compress":
-            k = (job.parameters or {}).get("k", 50)
+        if job.operation == "dct_compress":
+            quality = (job.parameters or {}).get("quality", 50)
             mode = (job.parameters or {}).get("mode", "grayscale")
-            stats = compress_image_svd(input_path, output_path, k, mode=mode)
+            stats = compress_image_dct(input_path, output_path, quality, mode=mode)
             logger.info(
-                "SVD compression done for job %s: mode=%s k=%s ratio=%sx time=%ss",
-                job.job_id, stats["mode"], stats["k_used"], stats["compression_ratio"], stats["processing_time_seconds"],
+                "DCT compression done for job %s: mode=%s quality=%s ratio=%sx time=%ss",
+                job.job_id, stats["mode"], stats["quality_used"], stats["compression_ratio"], stats["processing_time_seconds"],
             )
 
             result = Result(

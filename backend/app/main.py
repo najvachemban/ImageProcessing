@@ -14,7 +14,7 @@ app = FastAPI(title="Distributed Image Processing Platform")
 UPLOAD_DIR = "uploads"
 ALLOWED_CONTENT_TYPES = {"image/png", "image/jpeg", "image/jpg"}
 MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024  # 10 MB
-ALLOWED_OPERATIONS = {"svd_compress", "resize", "convert", "thumbnail"}
+ALLOWED_OPERATIONS = {"dct_compress", "resize", "convert", "thumbnail"}
 
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
